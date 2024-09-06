@@ -31,6 +31,8 @@ jobs:
 
     - name: Build AAR
       run: |
+        export GOOS=android
+        export GOARCH=arm64
         gomobile bind -target=android .
         mkdir -p output
         cp *.aar output/
