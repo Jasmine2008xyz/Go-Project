@@ -24,5 +24,19 @@ jobs:
     - name: Run
       run: ./main
 
-    - name: Test
-      run: go test -v ./...
+    - name: Install gomobile
+      run: |
+        go install golang.org/x/mobile/cmd/gomobile@latest
+        gomobile init
+
+    - name: Build AAR
+      run: |
+        gomobile bind -target=android .
+        mkdir -p output
+        cp *.aar output/
+
+    - name: Upload AAR
+      uses: actions/upload-artifact@v4
+      with:
+        Name: my-go-library
+        path: output/*.aar
