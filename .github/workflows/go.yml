@@ -21,9 +21,12 @@ jobs:
     - name: Install Android SDK and NDK 
       uses: android-actions/setup-android@v3
       with: 
-        sdk-version: '33' # 确保使用支持 API 21 的 SDK 版本 
-        ndk-version: '24.0.8215888' # 确保使用支持 API 21 的 NDK 版本 
-
+        cmdline-tools-version: 'latest'
+        packages: | 
+         platform-tools 
+         build-tools;33.0.0 
+         platforms;android-33
+        
     - name: Build
       run: go build -v -o main ./...
 
