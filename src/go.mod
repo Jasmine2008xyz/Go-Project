@@ -1,4 +1,4 @@
-module go-demo
+module main
 
 go 1.18
 
