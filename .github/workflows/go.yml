@@ -12,6 +12,13 @@ jobs:
     steps:
     - name: Checkout code
       uses: actions/checkout@v4
+      
+    - name: Install Android SDK 
+      uses: android-actions/setup-android@v4
+      with:
+         sdk-version: 'commandlinetools-linux-8512546_latest' 
+         ndk-version: '25.2.9519653' # 使用支持的 NDK 版本 
+
 
     - name: Set up Go
       uses: actions/setup-go@v4
