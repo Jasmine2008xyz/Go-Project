@@ -13,25 +13,18 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v4
 
-    - name: Install dependencies
-      run: |
-        sudo apt-get update
-        sudo apt-get install -y wget unzip
-
-    - name: Download and install Android SDK
-      run: |
-        wget https://dl.google.com/android/repository/commandlinetools-linux-8512546_latest.zip
-        mkdir -p $HOME/android-sdk
-        unzip commandlinetools-linux-8512546_latest.zip -d $HOME/android-sdk
-        yes | $HOME/android-sdk/cmdline-tools/bin/sdkmanager --licenses
-        $HOME/android-sdk/cmdline-tools/bin/sdkmanager "platform-tools" "platforms;android-30"
-
-    - name: Download and install Android NDK
-      run: |
-        wget https://dl.google.com/android/repository/android-ndk-r25b-linux.zip
+    - name: Set up Android SDK 
+      uses: android-actions/setup-android@v2 
+      with: 
+       api-level: 30 
+      # 其他有效参数 
+    - name: Install NDK 
+      run: 
+        |
+        wget https://dl.google.com/android/repository/android-ndk-r25b-linux.zip 
         unzip android-ndk-r25b-linux.zip -d $HOME/android-ndk
-        export ANDROID_NDK_HOME=$HOME/android-ndk/android-ndk-r25b
-
+        export ANDROID_NDK_HOME=$
+      
     - name: Set up Go
       uses: actions/setup-go@v4
       with:
@@ -55,3 +48,9 @@ jobs:
       with:
         name: my-go-library
         path: output/*.aar
+
+
+
+
+
+
