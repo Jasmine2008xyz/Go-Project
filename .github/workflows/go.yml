@@ -17,7 +17,7 @@ jobs:
       uses: android-actions/setup-android@v2 
       with: 
          api-level: 30 
-         ndk-version: 21.4.7075529 
+         ndk-version: 25.0.8775105
 
 
     - name: Set up Go
@@ -49,3 +49,7 @@ jobs:
       with:
         Name: my-go-library
         path: output/*.aar
+
+    - name: Check NDK version
+      run: $ANDROID_NDK_HOME/ndk-build --version
+
