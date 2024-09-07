@@ -13,30 +13,36 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v4
 
-    - name: Install Android SDK 
-      uses: android-actions/setup-android@v2 
-      with: 
-         api-level: 30 
-         ndk-version: 25.0.8775105
+    - name: Install dependencies
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y wget unzip
 
+    - name: Download and install Android SDK
+      run: |
+        wget https://dl.google.com/android/repository/commandlinetools-linux-8512546_latest.zip
+        mkdir -p $HOME/android-sdk
+        unzip commandlinetools-linux-8512546_latest.zip -d $HOME/android-sdk
+        yes | $HOME/android-sdk/cmdline-tools/bin/sdkmanager --licenses
+        $HOME/android-sdk/cmdline-tools/bin/sdkmanager "platform-tools" "platforms;android-30"
+
+    - name: Download and install Android NDK
+      run: |
+        wget https://dl.google.com/android/repository/android-ndk-r25b-linux.zip
+        unzip android-ndk-r25b-linux.zip -d $HOME/android-ndk
+        export ANDROID_NDK_HOME=$HOME/android-ndk/android-ndk-r25b
 
     - name: Set up Go
       uses: actions/setup-go@v4
       with:
         go-version: '1.20'
-        
-    - name: Build
-      run: go build -v -o main ./...
 
-    - name: Run
-      run: ./main
-      
     - name: Install gomobile
       run: |
         go install golang.org/x/mobile/cmd/gomobile@latest
         gomobile init
 
-    - name: Build AAR
+    - name: Build
       run: |
         export GOOS=android
         export GOARCH=arm64
@@ -47,9 +53,5 @@ jobs:
     - name: Upload AAR
       uses: actions/upload-artifact@v4
       with:
-        Name: my-go-library
+        name: my-go-library
         path: output/*.aar
-
-    - name: Check NDK version
-      run: $ANDROID_NDK_HOME/ndk-build --version
-
